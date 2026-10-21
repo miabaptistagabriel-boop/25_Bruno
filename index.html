@@ -24,38 +24,43 @@
     </div>
 
     <script>
-        // Lista com os nomes e as respetivas equipas/cores
+        // Função para retirar acentos e letras maiúsculas e comparar perfeitamente
+        function normalizar(texto) {
+            return texto.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase().trim();
+        }
+
         const listaEquipas = {
-            "Camila": { nome: "Verde", codigo: "#22c55e" },
-            "Bia": { nome: "Amarelo", codigo: "#eab308" },
-            "Bruno": { nome: "Verde", codigo: "#22c55e" },
-            "André": { nome: "Azul", codigo: "#3b82f6" },
-            "Maria": { nome: "Vermelho", codigo: "#ef4444" }
+            "camila": { nome: "Verde", codigo: "#22c55e" },
+            "bia": { nome: "Amarelo", codigo: "#eab308" },
+            "bruno": { nome: "Verde", codigo: "#22c55e" },
+            "andre": { nome: "Azul", codigo: "#3b82f6" },
+            "maria": { nome: "Vermelho", codigo: "#ef4444" }
         };
 
         function consultarEquipa() {
             const inputElement = document.getElementById("nomeInput");
-            const valor = inputElement.value.trim().toLowerCase();
+            const valorDigitado = normalizar(inputElement.value);
             const res = document.getElementById("resultado");
 
-            if (valor === "") {
+            if (valorDigitado === "") {
                 res.innerHTML = "<span style='color: #6b7280;'>Por favor, escreve um nome.</span>";
                 document.body.style.backgroundColor = "#f0f2f5";
                 return;
             }
 
-            if (listaEquipas[valor]) {
-                const equipa = listaEquipas[valor];
-                const nomeFormatado = valor.charAt(0).toUpperCase() + valor.slice(1);
-                res.innerHTML = `Olá, <b>${nomeFormatado}</b>!<br>A tua equipa é: <br><span style="color: ${equipa.codigo}; font-size: 26px; font-weight: bold; text-transform: uppercase;">${equipa.nome}</span>`;
+            if (listaEquipas[valorDigitado]) {
+                const equipa = listaEquipas[valorDigitado];
+                const nomeFormatado = inputElement.value.trim();
+                const nomeBonito = nomeFormatado.charAt(0).toUpperCase() + nomeFormatado.slice(1);
+                
+                res.innerHTML = `Olá, <b>${nomeBonito}</b>!<br>A tua equipa é: <br><span style="color: ${equipa.codigo}; font-size: 26px; font-weight: bold; text-transform: uppercase;">${equipa.nome}</span>`;
                 document.body.style.backgroundColor = equipa.codigo + "22";
             } else {
-                res.innerHTML = "<span style='color: #ef4444;'>Nome não encontrado! Verifica se escreveste bem.</span>";
+                res.innerHTML = "<span style='color: #ef4444;'>Nome não encontrado! Confirma se escreveste bem (Camila, Bia, Bruno, Andre, Maria).</span>";
                 document.body.style.backgroundColor = "#f0f2f5";
             }
         }
 
-        // Eventos para o botão e para a tecla Enter
         document.getElementById("btnVer").addEventListener("click", consultarEquipa);
         document.getElementById("nomeInput").addEventListener("keypress", function(event) {
             if (event.key === "Enter") {
