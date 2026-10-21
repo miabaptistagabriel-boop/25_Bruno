@@ -4,9 +4,10 @@
     <meta charset="UTF-8">
     <title>Descobre a tua Equipa!</title>
     <style>
-        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; text-align: center; margin-top: 80px; background-color: #f0f2f5; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; text-align: center; margin-top: 80px; background-color: #f0f2f5; transition: background-color 0.5s ease; }
         .card { padding: 40px; border-radius: 15px; display: inline-block; background: white; box-shadow: 0 8px 16px rgba(0,0,0,0.1); width: 350px; }
-        input { padding: 12px; font-size: 16px; width: 80%; margin-bottom: 15px; border: 1px solid #ccc; border-radius: 5px; text-align: center; }
+        input { padding: 12px; font-size: 16px; width: 80%; margin-bottom: 15px; border: 1px solid #ccc; border-radius: 5px; text-align: center; outline: none; }
+        input:focus { border-color: #4f46e5; }
         button { padding: 12px 20px; font-size: 16px; cursor: pointer; background: #4f46e5; color: white; border: none; border-radius: 5px; width: 85%; font-weight: bold; }
         button:hover { background: #4338ca; }
         #resultado { margin-top: 25px; font-size: 20px; }
@@ -16,48 +17,51 @@
     <div class="card">
         <h2>Qual é a minha Equipa?</h2>
         <p>Escreve o teu primeiro nome:</p>
-        <input type="text" id="nomeInput" placeholder="Ex: Maria" onkeypress="verificarEnter(event)">
+        <input type="text" id="nomeInput" placeholder="Ex: Bruno" autofocus>
         <br>
-        <button onclick="consultarEquipa()">Ver a minha Cor</button>
+        <button id="btnVer">Ver a minha Cor</button>
         <div id="resultado"></div>
     </div>
 
     <script>
-        // Podes alterar/adicionar aqui os teus convidados e as cores correspondentes
+        // Lista com os nomes e as respetivas equipas/cores
         const listaEquipas = {
-            "beatriz": { nome: "Vermelho", codigo: "#ef4444" },
-            "maria": { nome: "Azul", codigo: "#3b82f6" },
-            "andré": { nome: "Verde", codigo: "#22c55e" },
-            "Bruno": { nome: "Amarelo", codigo: "#eab308" },
-           
-       
+            "Camila": { nome: "Verde", codigo: "#22c55e" },
+            "Bia": { nome: "Amarelo", codigo: "#eab308" },
+            "Bruno": { nome: "Verde", codigo: "#22c55e" },
+            "André": { nome: "Azul", codigo: "#3b82f6" },
+            "Maria": { nome: "Vermelho", codigo: "#ef4444" }
+        };
 
         function consultarEquipa() {
-            let input = document.getElementById("nomeInput").value.trim().toLowerCase();
-            let res = document.getElementById("resultado");
+            const inputElement = document.getElementById("nomeInput");
+            const valor = inputElement.value.trim().toLowerCase();
+            const res = document.getElementById("resultado");
 
-            if (input === "") {
+            if (valor === "") {
                 res.innerHTML = "<span style='color: #6b7280;'>Por favor, escreve um nome.</span>";
                 document.body.style.backgroundColor = "#f0f2f5";
                 return;
             }
 
-            // Normalizar acentos se necessário, ou garantir que escrevem sem acentos
-            if (listaEquipas[input]) {
-                let equipa = listaEquipas[input];
-                res.innerHTML = `Olá, <b>${input.charAt(0).toUpperCase() + input.slice(1)}</b>!<br>A tua equipa é: <br><span style="color: ${equipa.codigo}; font-size: 26px; font-weight: bold; text-transform: uppercase;">${equipa.nome}</span>`;
-                document.body.style.backgroundColor = equipa.codigo + "22"; // Fundo com tom suave da cor
+            if (listaEquipas[valor]) {
+                const equipa = listaEquipas[valor];
+                const nomeFormatado = valor.charAt(0).toUpperCase() + valor.slice(1);
+                res.innerHTML = `Olá, <b>${nomeFormatado}</b>!<br>A tua equipa é: <br><span style="color: ${equipa.codigo}; font-size: 26px; font-weight: bold; text-transform: uppercase;">${equipa.nome}</span>`;
+                document.body.style.backgroundColor = equipa.codigo + "22";
             } else {
-                res.innerHTML = "<span style='color: #ef4444;'>Nome não encontrado! Verifica se escreveste bem ou fala com o organizador.</span>";
+                res.innerHTML = "<span style='color: #ef4444;'>Nome não encontrado! Verifica se escreveste bem.</span>";
                 document.body.style.backgroundColor = "#f0f2f5";
             }
         }
 
-        function verificarEnter(event) {
+        // Eventos para o botão e para a tecla Enter
+        document.getElementById("btnVer").addEventListener("click", consultarEquipa);
+        document.getElementById("nomeInput").addEventListener("keypress", function(event) {
             if (event.key === "Enter") {
                 consultarEquipa();
             }
-        }
+        });
     </script>
 </body>
 </html>
